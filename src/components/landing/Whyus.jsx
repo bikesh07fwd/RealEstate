@@ -5,7 +5,8 @@ const Whyus = () => {
     // ... keep the same features array as before
     {
       title: "Unparalleled Service",
-      description: "24/7 dedicated support with industry-leading response times",
+      description:
+        "24/7 dedicated support with industry-leading response times",
       icon: "fa-headset",
     },
     {
@@ -15,7 +16,8 @@ const Whyus = () => {
     },
     {
       title: "Prime Locations",
-      description: "Exclusive access to premium properties in emerging hotspots",
+      description:
+        "Exclusive access to premium properties in emerging hotspots",
       icon: "fa-location-dot",
     },
     {
@@ -59,7 +61,7 @@ const Whyus = () => {
             Why We're Unrivaled in <span className="">Real Estate</span>
           </h2>
           <a
-            href="#contact"
+            href="mailto:contact@realestate.com"
             className="flex items-center gap-3  text-white px-8 py-4 rounded-lg 
                       hover:bg-white hover:text-black transition-colors duration-300 group border border-amber-400/30
                       hover:shadow-[0_0_30px_-5px_rgba(245,158,11,0.3)] font-medium"
@@ -82,7 +84,7 @@ const Whyus = () => {
               <div className="mb-6 text-white">
                 <i className={`fa-solid ${feature.icon} text-3xl`}></i>
               </div>
-              
+
               {/* Content */}
               <h3 className="text-xl font-semibold text-gray-100 mb-3">
                 {feature.title}
@@ -92,9 +94,11 @@ const Whyus = () => {
               </p>
 
               {/* Hover Effect */}
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent 
-                            opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
+              <div
+                className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent 
+                            opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              />
+
               {/* Animated Border */}
               <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-amber-400/10 transition-all duration-500 pointer-events-none" />
             </div>

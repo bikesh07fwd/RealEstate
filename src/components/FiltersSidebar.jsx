@@ -1,23 +1,22 @@
-"use client";
-
 export default function FiltersSidebar({
   filters,
   handleFilterChange,
   isFilterOpen,
   toggleFilterPanel,
 }) {
-  // Property types for checkboxes
+  // Property types for checkboxes - updated to match backend data
   const propertyTypes = [
     "Apartment",
     "Villa",
     "House",
     "Commercial",
     "Office Space",
-    "Studio Apartment",
+    "Studio",
     "Penthouse",
     "Condo",
     "Townhouse",
     "Cottage",
+    "Residential",
   ];
 
   // Bedroom options
@@ -99,7 +98,7 @@ export default function FiltersSidebar({
             </div>
           </div>
 
-          {/* Price Range Filter */}
+          {/* Price Range Filter - Updated max value to 5M */}
           <div className="mb-6">
             <h3 className="text-sm font-semibold uppercase text-gray-500 mb-3">
               Price Range
@@ -109,8 +108,8 @@ export default function FiltersSidebar({
                 <input
                   type="range"
                   min="0"
-                  max="2000000"
-                  step="10000"
+                  max="5000000"
+                  step="50000"
                   value={filters.priceRange[1]}
                   onChange={(e) =>
                     handleFilterChange("priceRange", [
@@ -153,7 +152,7 @@ export default function FiltersSidebar({
                     onChange={(e) =>
                       handleFilterChange("priceRange", [
                         filters.priceRange[0],
-                        Number.parseInt(e.target.value) || 2000000,
+                        Number.parseInt(e.target.value) || 5000000,
                       ])
                     }
                   />
@@ -191,7 +190,7 @@ export default function FiltersSidebar({
             </div>
           </div>
 
-          {/* Area Filter */}
+          {/* Area Filter - Using carpetArea from backend */}
           <div className="mb-6">
             <h3 className="text-sm font-semibold uppercase text-gray-500 mb-3">
               Area (sq ft)

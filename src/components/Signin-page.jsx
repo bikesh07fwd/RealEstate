@@ -1,15 +1,19 @@
-"use client";
-
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function SigninPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    role: "buyer",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,10 +23,34 @@ export default function SigninPage() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
-    // Handle form submission logic here
+    if (formData.role == "buyer") {
+      const res = await axios.post("http://localhost:8080/login_buyer.php", {
+        email: formData.email,
+        password: formData.password,
+      });
+      console.log(res.data);
+      if (res.data.success) {
+        localStorage.setItem("token", res.data.token);
+        navigate("/all-property");
+      } else {
+        toast.error(res.data.message);
+      }
+    } else {
+      const res = await axios.post("http://localhost:8080/login_seller.php", {
+        email: formData.email,
+        password: formData.password,
+      });
+      console.log(res.data);
+      if (res.data.success) {
+        localStorage.setItem("token", res.data.token);
+        navigate("/seller-dashboard");
+      } else {
+        toast.error(res.data.message);
+      }
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -101,14 +129,22 @@ export default function SigninPage() {
               </button>
             </div>
 
-            {/* Forgot Password Link */}
-            <div className="text-right">
-              <a
-                href="#"
-                className="text-sm text-amber-700 hover:text-amber-800 transition-colors"
+            {/* Role Dropdown - After Password */}
+            <div className="relative mt-4">
+              <label
+                htmlFor="role"
+                className="absolute left-3 text-gray-400 top-3 transition-all duration-200 pointer-events-none"
+              ></label>
+              <select
+                id="role"
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                className="w-full px-3 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all duration-200"
               >
-                Forgot password?
-              </a>
+                <option value="buyer">Buyer</option>
+                <option value="seller">Seller</option>
+              </select>
             </div>
 
             {/* Sign In Button */}
@@ -123,12 +159,6 @@ export default function SigninPage() {
             <div className="text-center mt-4">
               <p className="text-gray-600">
                 Don't have an account?{" "}
-                {/* <a
-                  href="#"
-                  className="text-amber-700 hover:text-amber-800 font-medium transition-colors"
-                >
-                  Sign up
-                </a> */}
                 <Link to="/sign-up">
                   <button className="text-amber-700 hover:text-amber-800 font-medium transition-colors">
                     Sign up

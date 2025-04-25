@@ -8,8 +8,12 @@ const Stats = () => {
         {/* Top Content */}
         <div className="mb-12 max-w-2xl ml-auto">
           <p className="text-2xl md:text-3xl font-light text-gray-700 leading-snug">
-            Transforming real estate experiences through innovative solutions and 
-            <span className="font-medium text-gray-900"> trusted partnerships</span>
+            Transforming real estate experiences through innovative solutions
+            and
+            <span className="font-medium text-gray-900">
+              {" "}
+              trusted partnerships
+            </span>
           </p>
         </div>
 
@@ -17,16 +21,20 @@ const Stats = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl ml-auto">
           <div className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-4xl font-bold text-gray-900 mb-2">35+</h3>
-            <p className="text-gray-600 font-medium">Successful Transactions Monthly</p>
+            <p className="text-gray-600 font-medium">
+              Successful Transactions Monthly
+            </p>
             <div className="w-12 h-1 bg-blue-100 mt-4 rounded-full" />
           </div>
-          
+
           <div className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-4xl font-bold text-gray-900 mb-2">95%</h3>
-            <p className="text-gray-600 font-medium">Customer Satisfaction Rate</p>
+            <p className="text-gray-600 font-medium">
+              Customer Satisfaction Rate
+            </p>
             <div className="w-12 h-1 bg-blue-100 mt-4 rounded-full" />
           </div>
-          
+
           <div className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-4xl font-bold text-gray-900 mb-2">174</h3>
             <p className="text-gray-600 font-medium">Ready Properties</p>
@@ -43,10 +51,10 @@ const Stats = () => {
             alt="Real estate properties"
             className="w-full h-full object-cover absolute inset-0"
           />
-          
+
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/30 to-transparent" />
-          
+
           {/* Content Container */}
           <div className="relative h-full flex flex-col justify-between p-8 text-white">
             {/* Top Content */}
@@ -59,7 +67,7 @@ const Stats = () => {
                   Investments starting from $145k with 10% annual yield
                 </p>
               </div>
-              
+
               <div className="flex gap-4">
                 <button className="p-3 bg-white/10 rounded-full hover:bg-white/20 transition-colors">
                   <i className="fa-solid fa-arrow-up-right-from-square text-lg" />
@@ -71,7 +79,7 @@ const Stats = () => {
             </div>
 
             {/* Bottom Content */}
-            <div className="flex justify-end">
+            {/* <div className="flex justify-end">
               <a 
                 href="#"
                 className="inline-flex items-center gap-3 bg-white text-gray-900 px-6 py-3 rounded-full 
@@ -80,7 +88,7 @@ const Stats = () => {
                 Download Catalog
                 <i className="fa-solid fa-download text-sm" />
               </a>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -1,19 +1,26 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Hero from "./Hero";
 import PropertyListings from "./PropertyListings";
-import { propertyData } from "./data/propertyData";
+import {
+  propertyData,
+  adaptPropertyData,
+} from "./../components/data/propertyData";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function RealEstateApp() {
-  const [properties, setProperties] = useState(propertyData);
-  const [filteredProperties, setFilteredProperties] = useState(propertyData);
+  // Use the adapter function to transform the backend data
+  const [properties, setProperties] = useState(() => adaptPropertyData([]));
+  const [filteredProperties, setFilteredProperties] = useState(() =>
+    adaptPropertyData([])
+  );
   const [filters, setFilters] = useState({
     location: "",
     propertyType: [],
     bedrooms: [],
-    priceRange: [0, 2000000],
+    priceRange: [0, 5000000],
     areaRange: [0, 10000],
     availability: "sale", // 'sale' or 'rent'
     furnishing: "", // 'fully', 'semi', 'unfurnished'
@@ -21,6 +28,39 @@ export default function RealEstateApp() {
   const [sortOption, setSortOption] = useState("newest");
   const [viewMode, setViewMode] = useState("grid");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const navigate = useNavigate();
+
+  async function verifyuser() {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/sign-up");
+      }
+    } catch (error) {
+      toast.error("some error occoured");
+      console.log(error);
+      navigate("/sign-up");
+      toast.dismiss();
+    }
+  }
+
+  useEffect(() => {
+    async function fetchProperties() {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/get_verified_props.php"
+        );
+        console.log(response.data);
+        const adaptedData = adaptPropertyData(response.data.properties);
+        setProperties(adaptedData);
+        setFilteredProperties(adaptedData);
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+      }
+    }
+    verifyuser();
+    fetchProperties();
+  }, []);
 
   // Apply filters and sorting whenever filters or sort option changes
   useEffect(() => {

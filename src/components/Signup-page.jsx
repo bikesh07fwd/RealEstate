@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,7 +13,18 @@ export default function SignupPage() {
     email: "",
     password: "",
     phoneNumber: "",
+    address: "",
+    role: "buyer",
   });
+  const navigate = useNavigate();
+
+  const handleRoleChange = (e) => {
+    const { value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      role: value,
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,10 +34,72 @@ export default function SignupPage() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const isPasswordStrong = (password) => {
+    const strongPasswordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    return strongPasswordRegex.test(password);
+  };
+
+  const isValidPhoneNumber = (phoneNumber) => {
+    const phoneRegex = /^\d{10,}$/; // at least 10 digits, only numbers
+    return phoneRegex.test(phoneNumber);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!isPasswordStrong(formData.password)) {
+      alert(
+        "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character."
+      );
+      return;
+    }
+
+    if (!isValidPhoneNumber(formData.phoneNumber)) {
+      alert(
+        "Please enter a valid phone number (at least 10 digits, numbers only)."
+      );
+      return;
+    }
+
     console.log("Form submitted:", formData);
-    // Handle form submission logic here
+    if (formData.role == "buyer") {
+      try {
+        const res = await axios.post("http://localhost:8080/create_buyer.php", {
+          email: formData.email,
+          password: formData.password,
+          name: formData.fullName,
+          phone: formData.phoneNumber,
+        });
+        console.log(res);
+        if (res.data.success) {
+          await localStorage.setItem("token", res.data.token);
+          navigate("/all-property");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        const res = await axios.post(
+          "http://localhost:8080/create_seller.php",
+          {
+            email: formData.email,
+            password: formData.password,
+            name: formData.fullName,
+            address: formData.address,
+            phone: formData.phoneNumber,
+          }
+        );
+        console.log(res);
+        if (res.data.success) {
+          await localStorage.setItem("token", res.data.token);
+          navigate("/seller-dashboard");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -169,7 +244,52 @@ export default function SignupPage() {
               />
             </div>
 
-            {/* Sign Up Button */}
+            {/* Seller-specific fields */}
+            {formData.role === "seller" && (
+              <>
+                <div className="relative">
+                  <label
+                    htmlFor="address"
+                    className={`absolute left-3 transition-all duration-200 pointer-events-none ${
+                      formData.address
+                        ? "text-xs text-gray-500 -top-2 bg-gray-50 px-1"
+                        : "text-gray-400 top-3"
+                    }`}
+                  >
+                    Address
+                  </label>
+                  <input
+                    type="text"
+                    id="address"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    className="w-full px-3 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all duration-200"
+                    required
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Role Dropdown (moved to the bottom) */}
+            <div className="relative">
+              <label
+                htmlFor="role"
+                className="absolute left-3 text-gray-400 top-3 transition-all duration-200"
+              ></label>
+              <select
+                id="role"
+                name="role"
+                value={formData.role}
+                onChange={handleRoleChange}
+                className="w-full px-3 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all duration-200"
+              >
+                <option value="buyer">Buyer</option>
+                <option value="seller">Seller</option>
+              </select>
+            </div>
+
+            {/* Submit Button */}
             <button
               type="submit"
               className="w-full py-3 px-4 bg-gradient-to-r from-amber-700 to-amber-500 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
@@ -181,12 +301,6 @@ export default function SignupPage() {
             <div className="text-center mt-4">
               <p className="text-gray-600">
                 Already have an account?{" "}
-                {/* <a
-                  href="#"
-                  className="text-amber-700 hover:text-amber-800 font-medium transition-colors"
-                >
-                  Log in
-                </a> */}
                 <Link to="/sign-in">
                   <button className="text-amber-700 hover:text-amber-800 font-medium transition-colors">
                     Log in

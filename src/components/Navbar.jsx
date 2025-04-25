@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar({ toggleFilterPanel }) {
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-md">
@@ -45,11 +47,14 @@ export default function Navbar({ toggleFilterPanel }) {
           <button className="md:hidden text-gray-600 hover:text-blue-500">
             <i className="fas fa-search text-lg"></i>
           </button>
-          <button className="relative text-gray-600 hover:text-blue-500">
-            <i className="far fa-heart text-lg"></i>
-            <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-              3
-            </span>
+          <button
+            onClick={() => {
+              localStorage.clear();
+              navigate("/sign-up");
+            }}
+            className="relative cursor-pointer text-gray-600 hover:text-blue-500"
+          >
+            Logout
           </button>
           <button className="text-gray-600 hover:text-blue-500">
             <i className="far fa-user text-lg"></i>
